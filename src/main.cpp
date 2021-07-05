@@ -11,7 +11,7 @@
 int rows = NUMBER_ROWS;                                                      // Number of Rows in the Grid
 int columns = NUMBER_COLUMNS;                                                // Number of Columns in the Grid
 int size = GRID_ELEMENT_SIZE;                                                // The Size of Each Elements
-int gridState[NUMBER_ROWS * NUMBER_COLUMNS] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, // The Grid State
+int gridState[NUMBER_ROWS * NUMBER_COLUMNS] = {1, 0, 3, 0, 0, 0, 0, 0, 0, 0, // The Grid State
                                                0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
                                                0, 1, 1, 1, 1, 0, 0, 0, 0, 0,
                                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -20,7 +20,7 @@ int gridState[NUMBER_ROWS * NUMBER_COLUMNS] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 
                                                0, 1, 0, 0, 0, 1, 0, 0, 0, 0,
                                                0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
                                                0, 1, 0, 0, 0, 0, 1, 1, 0, 0,
-                                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+                                               0, 0, 0, 0, 0, 0, 0, 0, 2, 0};
 
 int main()
 {
@@ -36,9 +36,6 @@ int main()
     }
     Grid grid(rows, columns, elements);
 
-    // Process Pathfinding
-    std::cout << "Finding path...." << std::endl;
-
     // Get Image
     std::cout << "Setting up Image" << std::endl;
     int imgRows = rows * size;
@@ -46,7 +43,16 @@ int main()
     Image img = new Colori[imgRows * imgColumns];
     img = get_image_from_grid(&grid);
 
-    stbi_write_png("out.png", imgColumns, imgRows, 4, (void *)img, imgColumns * sizeof(Colori));
+    stbi_write_png("path_to_find.png", imgColumns, imgRows, 4, (void *)img, imgColumns * sizeof(Colori));
+
+    // Process Pathfinding
+    std::cout << "Finding path...." << std::endl;
+
+    // Show final Result
+    std::cout << "Showing Result" << std::endl;
+    img = get_image_from_grid(&grid);
+
+    stbi_write_png("final_path.png", imgColumns, imgRows, 4, (void *)img, imgColumns * sizeof(Colori));
 
     // Finish Program
     delete[] elements;

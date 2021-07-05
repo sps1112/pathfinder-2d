@@ -60,6 +60,15 @@ Image get_image_from_grid(Grid *grid)
             case BLOCKED:
                 col = BLOCKED_COLOR;
                 break;
+            case ORIGIN:
+                col = ORIGIN_COLOR;
+                break;
+            case TARGET:
+                col = TARGET_COLOR;
+                break;
+            case PATH:
+                col = PATH_COLOR;
+                break;
             }
             int startX = x * size;
             int startY = y * size;
@@ -67,7 +76,7 @@ Image get_image_from_grid(Grid *grid)
             {
                 for (int newX = 0; newX < size; newX++)
                 {
-                    int index = (startX + newX) * (columns * size) + (startY + newY);
+                    int index = (startY + newY) * (columns * size) + (startX + newX);
                     if (newY < borderSize / 2 || newY >= (size - (borderSize / 2)))
                     {
                         img[index] = get_color(BORDER_COLOR);

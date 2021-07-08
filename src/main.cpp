@@ -3,6 +3,7 @@
 #include <grid.h>
 #include <draw.h>
 #include <stb_image_write.h>
+#include <path.h>
 
 // Standard Headers
 #include <iostream>
@@ -43,16 +44,18 @@ int main()
     Image img = new Colori[imgRows * imgColumns];
     img = get_image_from_grid(&grid);
 
-    stbi_write_png("path_to_find.png", imgColumns, imgRows, 4, (void *)img, imgColumns * sizeof(Colori));
+    stbi_write_png("1.path_to_find.png", imgColumns, imgRows, 4, (void *)img, imgColumns * sizeof(Colori));
 
     // Process Pathfinding
     std::cout << "Finding path...." << std::endl;
+    Path path = find_path(&grid);
+    path.set_path();
 
     // Show final Result
     std::cout << "Showing Result" << std::endl;
     img = get_image_from_grid(&grid);
 
-    stbi_write_png("final_path.png", imgColumns, imgRows, 4, (void *)img, imgColumns * sizeof(Colori));
+    stbi_write_png("2.final_path.png", imgColumns, imgRows, 4, (void *)img, imgColumns * sizeof(Colori));
 
     // Finish Program
     delete[] elements;

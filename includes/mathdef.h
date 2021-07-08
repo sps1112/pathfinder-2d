@@ -15,6 +15,12 @@ int max(int a, int b)
     return ((a > b) ? a : b);
 }
 
+// Clamps the value of n from min to max
+int clamp(int n, int min, int max)
+{
+    return ((n > max) ? max : ((n < min) ? min : n));
+}
+
 // 2D Position Struct
 struct Position
 {
@@ -22,24 +28,6 @@ struct Position
     int y; // Y Coordinate
     // Position Struct Constructor
     Position(int x_, int y_) : x(x_), y(y_) {}
-    inline float sqlen()
-    {
-        return ((x * x) + (y * y));
-    }
-
-    inline float len()
-    {
-        return std::sqrt(sqlen());
-    }
-
-    inline Position operator+(const Position &b)
-    {
-        return Position(x + b.x, y + b.y);
-    }
-    inline Position operator-(const Position &b)
-    {
-        return Position(x - b.x, y - b.y);
-    }
 };
 
 #endif // MATHDEF_H

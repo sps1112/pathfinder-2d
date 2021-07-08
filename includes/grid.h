@@ -3,9 +3,10 @@
 
 // Custom Headers
 #include <mathdef.h>
+#include <vector>
 
-// State of a Grid Element
-enum ELEMENT_STATE
+// State of a Grid Node
+enum NODE_STATE
 {
     EMPTY,
     BLOCKED,
@@ -15,33 +16,104 @@ enum ELEMENT_STATE
 };
 
 // Returns state from int value
-ELEMENT_STATE get_state_from_int(int n)
+NODE_STATE get_state_from_int(int n)
 {
-    return static_cast<ELEMENT_STATE>(n);
+    return static_cast<NODE_STATE>(n);
 }
 
-// The Grid Element Struct
-struct GridElement
+// The Grid Node Struct
+struct GridNode
 {
-    Position p;
-    ELEMENT_STATE state; // State of Grid
-    // Default Element Constuctor
-    GridElement(Position p_, ELEMENT_STATE state_ = EMPTY) : p(p_), state(state_) {}
-    GridElement(int x_ = 0, int y_ = 0, ELEMENT_STATE state_ = EMPTY) : p(Position(x_, y_)), state(state_) {}
+    Position pos;                       // Position of node
+    NODE_STATE state;                   // State of Grid Node
+    std::vector<GridNode *> neighbours; // List of Neighbour Nodes
+    int neighbourCount;                 // Neighbour Count
+    GridNode *parent;
+    int gCost;
+    int hCost;
+    int fCost;
+    // Position Node Constuctor
+    GridNode(Position pos_, NODE_STATE state_ = EMPTY) : pos(pos_), state(state_), neighbourCount(0) {}
+    // Node Constuctor
+    GridNode(int x_ = 0, int y_ = 0, NODE_STATE state_ = EMPTY) : pos(Position(x_, y_)), state(state_), neighbourCount(0) {}
+    // Checks if Node is Traversable or not
+    bool is_traversable()
+    {
+        return (state != BLOCKED);
+    }
 };
 
 // The Grid Struct
 struct Grid
 {
-    int rows;              // Number of rows
-    int columns;           // Number of Columns
-    GridElement *elements; // Element List
+    int rows;        // Number of rows
+    int columns;     // Number of Columns
+    GridNode *nodes; // Element List
     // Grid Constructor
-    Grid(int rows_, int columns_, GridElement *elements_) : rows(rows_), columns(columns_), elements(elements_) {}
+    Grid(int rows_, int columns_, GridNode *nodes_) : rows(rows_), columns(columns_), nodes(nodes_) {}
     // Returns the element positioned at (x,y)
-    GridElement *get_element(int x, int y)
+    GridNode *get_node_from_position(int x, int y)
     {
-        return &(elements[y * columns + x]);
+        return &(nodes[y * columns + x]);
+    }
+
+    // Returns the Starting Node in the Grid
+    GridNode *get_start_node()
+    {
+        for (int y = 0; y < rows; y++)
+        {
+            for (int x = 0; x < columns; x++)
+            {
+                if (get_node_from_position(x, y)->state == ORIGIN)
+                {
+                    return get_node_from_position(x, y);
+                }
+            }
+        }
+        return get_node_from_position(0, 0);
+    }
+
+    // Returns the Target Node in the Grid
+    GridNode *get_target_node()
+    {
+        for (int y = 0; y < rows; y++)
+        {
+            for (int x = 0; x < columns; x++)
+            {
+                if (get_node_from_position(x, y)->state == TARGET)
+                {
+                    return get_node_from_position(x, y);
+                }
+            }
+        }
+        return get_node_from_position(0, 0);
+    }
+
+    // Sets up the neighbour nodes for each node
+    void setup_neighbours()
+    {
+        for (int y = 0; y < rows; y++)
+        {
+            for (int x = 0; x < columns; x++)
+            {
+                GridNode *node = get_node_from_position(x, y);
+                int startX = clamp(x - 1, 0, columns - 1);
+                int endX = clamp(x + 1, 0, columns - 1);
+                int startY = clamp(y - 1, 0, rows - 1);
+                int endY = clamp(y + 1, 0, rows - 1);
+                for (int newY = startY; newY <= endY; newY++)
+                {
+                    for (int newX = startX; newX <= endX; newX++)
+                    {
+                        if (newX != x || newY != y)
+                        {
+                            node->neighbours.push_back(get_node_from_position(newX, newY));
+                            node->neighbourCount++;
+                        }
+                    }
+                }
+            }
+        }
     }
 };
 

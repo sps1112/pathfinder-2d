@@ -50,7 +50,7 @@ Image get_image_from_grid(Grid *grid)
     {
         for (int x = 0; x < columns; x++)
         {
-            ELEMENT_STATE state = grid->get_element(x, y)->state;
+            NODE_STATE state = grid->get_node_from_position(x, y)->state;
             Colorf col(0.0f);
             switch (state)
             {

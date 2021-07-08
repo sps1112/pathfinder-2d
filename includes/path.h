@@ -144,7 +144,7 @@ struct NodeList
             }
             else if (list[i]->fCost == minFCost)
             {
-                if (list[i]->hCost == minHCost)
+                if (list[i]->hCost <= minHCost)
                 {
                     minFCost = list[i]->fCost;
                     minHCost = list[i]->hCost;
@@ -225,14 +225,21 @@ Path find_path(Grid *grid)
             GridNode *neighbour = currentNode->neighbours[i];
             if (neighbour->is_traversable() && !closedList.has_node(neighbour))
             {
-                if (!openList.has_node(neighbour) || get_distance_bw_nodes(startNode, neighbour) < neighbour->gCost)
+                int moveCost = currentNode->gCost + get_distance_bw_nodes(currentNode, neighbour);
+                if (!openList.has_node(neighbour) || moveCost < neighbour->gCost)
                 {
-                    set_cost(neighbour, startNode, targetNode);
+                    neighbour->gCost = moveCost;
+                    neighbour->hCost = get_distance_bw_nodes(targetNode, neighbour);
+                    neighbour->fCost = neighbour->gCost + neighbour->hCost;
                     neighbour->parent = currentNode;
-                }
-                if (!openList.has_node(neighbour))
-                {
-                    openList.add_node(neighbour);
+                    if (!openList.has_node(neighbour))
+                    {
+                        openList.add_node(neighbour);
+                    }
+                    else
+                    {
+                        set_cost(neighbour, startNode, targetNode);
+                    }
                 }
             }
         }
@@ -250,12 +257,6 @@ Path find_path(Grid *grid)
         node = node->parent;
         p.number++;
     }
-
-    /*p.number = 3;
-    p.grids = new GridNode[3];
-    p.grids[0].element = grid->get_element(3, 0);
-    p.grids[1].element = grid->get_element(4, 0);
-    p.grids[2].element = grid->get_element(4, 1);*/
     return p;
 }
 

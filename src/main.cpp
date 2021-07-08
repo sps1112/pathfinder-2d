@@ -12,15 +12,15 @@
 int rows = NUMBER_ROWS;                                                      // Number of Rows in the Grid
 int columns = NUMBER_COLUMNS;                                                // Number of Columns in the Grid
 int size = GRID_ELEMENT_SIZE;                                                // The Size of Each Elements
-int gridState[NUMBER_ROWS * NUMBER_COLUMNS] = {0, 3, 1, 0, 0, 0, 0, 0, 0, 0, // The Grid State
-                                               0, 0, 1, 0, 0, 0, 1, 1, 1, 0,
-                                               1, 0, 1, 0, 0, 0, 0, 0, 1, 0,
-                                               0, 1, 1, 1, 0, 1, 1, 0, 1, 0,
-                                               1, 0, 1, 0, 0, 0, 1, 0, 1, 0,
-                                               0, 1, 1, 0, 0, 0, 1, 0, 1, 0,
-                                               0, 0, 0, 0, 0, 0, 1, 1, 1, 0,
-                                               0, 0, 1, 1, 1, 1, 1, 0, 0, 0,
-                                               1, 1, 1, 0, 2, 0, 0, 0, 0, 0,
+int gridState[NUMBER_ROWS * NUMBER_COLUMNS] = {0, 0, 3, 0, 0, 0, 0, 0, 0, 0, // The Grid State
+                                               0, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+                                               0, 1, 1, 1, 1, 0, 0, 0, 0, 0,
+                                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                               0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+                                               0, 0, 1, 1, 0, 0, 0, 0, 0, 0,
+                                               1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+                                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                               0, 0, 0, 0, 2, 0, 0, 0, 0, 0,
                                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 int main()

@@ -225,6 +225,10 @@ Path find_path(Grid *grid)
             GridNode *neighbour = currentNode->neighbours[i];
             if (neighbour->is_traversable() && !closedList.has_node(neighbour))
             {
+                if (neighbour != targetNode)
+                {
+                    neighbour->state = CHECKED;
+                }
                 int moveCost = currentNode->gCost + get_distance_bw_nodes(currentNode, neighbour);
                 if (!openList.has_node(neighbour) || moveCost < neighbour->gCost)
                 {

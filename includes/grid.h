@@ -13,6 +13,7 @@ enum NODE_STATE
     ORIGIN,
     TARGET,
     PATH,
+    CHECKED,
 };
 
 // Returns state from int value

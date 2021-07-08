@@ -69,6 +69,8 @@ Image get_image_from_grid(Grid *grid)
             case PATH:
                 col = PATH_COLOR;
                 break;
+            case CHECKED:
+                col = CHECK_COLOR;
             }
             int startX = x * size;
             int startY = y * size;

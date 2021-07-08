@@ -15,5 +15,6 @@
 #define ORIGIN_COLOR Colorf(0.0f, 0.0f, 1.0f)
 #define TARGET_COLOR Colorf(1.0f, 0.0f, 0.0f)
 #define PATH_COLOR Colorf(0.0f, 1.0f, 0.0f)
+#define CHECK_COLOR Colorf(1.0f, 1.0f, 0.0f)
 
 #endif // CONFIG_H

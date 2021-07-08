@@ -1,6 +1,9 @@
 #ifndef GRID_H
 #define GRID_H
 
+// Custom Headers
+#include <mathdef.h>
+
 // State of a Grid Element
 enum ELEMENT_STATE
 {
@@ -20,11 +23,11 @@ ELEMENT_STATE get_state_from_int(int n)
 // The Grid Element Struct
 struct GridElement
 {
-    int x;               // X coordinate
-    int y;               // Y coordinate
+    Position p;
     ELEMENT_STATE state; // State of Grid
     // Default Element Constuctor
-    GridElement(int x_ = 0, int y_ = 0, ELEMENT_STATE state_ = EMPTY) : x(x_), y(y_), state(state_) {}
+    GridElement(Position p_, ELEMENT_STATE state_ = EMPTY) : p(p_), state(state_) {}
+    GridElement(int x_ = 0, int y_ = 0, ELEMENT_STATE state_ = EMPTY) : p(Position(x_, y_)), state(state_) {}
 };
 
 // The Grid Struct

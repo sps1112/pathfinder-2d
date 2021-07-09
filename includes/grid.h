@@ -30,10 +30,10 @@ struct GridNode
     NODE_STATE state;                   // State of Grid Node
     std::vector<GridNode *> neighbours; // List of Neighbour Nodes
     int neighbourCount;                 // Neighbour Count
-    GridNode *parent;
-    int gCost;
-    int hCost;
-    int fCost;
+    GridNode *parent;                   // The node which comes before this node
+    int gCost;                          // Distance from start Node
+    int hCost;                          // Distance from target Node
+    int fCost;                          // Sum of Gcost and Hcost
     // Position Node Constuctor
     GridNode(Position pos_, NODE_STATE state_ = EMPTY) : pos(pos_), state(state_), neighbourCount(0) {}
     // Node Constuctor

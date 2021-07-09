@@ -20,11 +20,13 @@ int get_distance_bw_nodes(GridNode *a, GridNode *b)
 
 struct NodeList
 {
-    GridNode **list; // List of Nodes
-    int count;       // Number of elements in list
+    GridNode **list; // List of Node pointers
+    int count;       // Number of active elements in list
+    int capacity;    // Amount of data points available
     // Default Constructor for Node List
-    NodeList() : count(0) {}
+    NodeList() : count(0), capacity(0) {}
 
+    // Prints all the nodes in the list
     void print_node_list()
     {
         std::cout << "Printing List..." << std::endl;
@@ -38,20 +40,24 @@ struct NodeList
     // Add a new Node to the List
     void add_node(GridNode *node)
     {
-        GridNode **tempList;
-        if (count > 0)
-        {
-            tempList = new GridNode *[count];
-            for (int i = 0; i < count; i++)
-            {
-                tempList[i] = list[i];
-            }
-        }
         count++;
-        list = new GridNode *[count];
-        for (int i = 0; i < count - 1; i++)
+        if (capacity == count - 1)
         {
-            list[i] = tempList[i];
+            capacity = (capacity <= 3) ? (capacity + 1) : ((int)(capacity * 1.5f));
+            GridNode **tempList;
+            if (count > 1)
+            {
+                tempList = new GridNode *[count - 1];
+                for (int i = 0; i < count - 1; i++)
+                {
+                    tempList[i] = list[i];
+                }
+            }
+            list = new GridNode *[capacity];
+            for (int i = 0; i < count - 1; i++)
+            {
+                list[i] = tempList[i];
+            }
         }
         list[count - 1] = node;
     }
@@ -88,9 +94,9 @@ struct NodeList
     // Removes the Node from the list
     void remove_node(GridNode *node)
     {
-        int index = get_node_index(node);
         if (count > 1)
         {
+            int index = get_node_index(node);
             if (index >= 0)
             {
                 GridNode **tempList;
@@ -105,7 +111,6 @@ struct NodeList
                     }
                 }
                 count--;
-                list = new GridNode *[count];
                 for (int i = 0; i < count; i++)
                 {
                     list[i] = tempList[i];
@@ -190,18 +195,11 @@ struct Path
 // Returns a Path for the Grid
 Path find_path(Grid *grid)
 {
-    int rows = grid->rows;
-    int columns = grid->columns;
-    std::cout << "Map is " << rows << " X " << columns << std::endl;
     // Calculate Path
     NodeList openList;
     NodeList closedList;
     GridNode *targetNode = grid->get_target_node();
     GridNode *startNode = grid->get_start_node();
-    std::cout << "Start from:"
-              << "(" << startNode->pos.x << "," << startNode->pos.y << ")" << std::endl;
-    std::cout << "Target is:"
-              << "(" << targetNode->pos.x << "," << targetNode->pos.y << ")" << std::endl;
     openList.add_node(startNode);
     openList.set_list_costs(startNode, targetNode);
     int n = 0;
@@ -214,7 +212,6 @@ Path find_path(Grid *grid)
                   << "(" << currentNode->pos.x << "," << currentNode->pos.y << ")" << std::endl;
         openList.remove_node(currentNode);
         closedList.add_node(currentNode);
-        std::cout << "Check for target..." << std::endl;
         if (currentNode == targetNode)
         {
             break;
@@ -223,7 +220,6 @@ Path find_path(Grid *grid)
         {
             currentNode->state = CHECKED;
         }
-        std::cout << "Check for neighbours..." << std::endl;
         for (int i = 0; i < currentNode->neighbourCount; i++)
         {
             GridNode *neighbour = currentNode->neighbours[i];
@@ -255,7 +251,7 @@ Path find_path(Grid *grid)
     GridNode *node = targetNode->parent;
     while (node != startNode)
     {
-        std::cout << "Current Node:"
+        std::cout << "Path Node:"
                   << "(" << node->pos.x << "," << node->pos.y << ")" << std::endl;
         p.grids.add_node(node);
         node = node->parent;

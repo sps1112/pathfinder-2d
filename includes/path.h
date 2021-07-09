@@ -231,6 +231,7 @@ Path find_path(Grid *grid)
                     neighbour->parent = currentNode;
                     if (!openList.has_node(neighbour))
                     {
+                        neighbour->state = (neighbour != targetNode) ? NEIGHBOUR : neighbour->state;
 #if USE_HEAPS
                         openList.add_to_heap(neighbour);
 #else

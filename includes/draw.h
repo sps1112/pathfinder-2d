@@ -27,9 +27,9 @@ Colori get_color(Colorf col)
 #if GAMMA_CORRECTION
     // Gamma correction
     float gamma = 1 / 2.2f;
-    col.r = std::pow(clamp(col.r), gamma);
-    col.g = std::pow(clamp(col.g), gamma);
-    col.b = std::pow(clamp(col.b), gamma);
+    col.r = std::pow(clampf(col.r), gamma);
+    col.g = std::pow(clampf(col.g), gamma);
+    col.b = std::pow(clampf(col.b), gamma);
 #endif
     // Convert a valid Colorf to Colori
     return (255 << 24) | ((int)std::floor(col.b * 255) << 16) | ((int)std::floor(col.g * 255) << 8) | (int)std::floor(col.r * 255);
@@ -70,7 +70,23 @@ Image get_image_from_grid(Grid *grid)
                 col = PATH_COLOR;
                 break;
             case CHECKED:
+#if SHOW_PATH_LIST
                 col = CHECK_COLOR;
+#else
+#if SHOW_PATH_NEIGHBOURS
+                col = NEIGHBOUR_COLOR;
+#else
+                col = EMPTY_COLOR;
+#endif
+#endif
+                break;
+            case NEIGHBOUR:
+#if SHOW_PATH_NEIGHBOURS
+                col = NEIGHBOUR_COLOR;
+#else
+                col = EMPTY_COLOR;
+#endif
+                break;
             }
             int startX = x * size;
             int startY = y * size;

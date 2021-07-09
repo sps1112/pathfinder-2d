@@ -4,6 +4,7 @@
 #include <draw.h>
 #include <stb_image_write.h>
 #include <path.h>
+#include <chrono>
 
 // Standard Headers
 #include <iostream>
@@ -12,9 +13,9 @@
 int rows = NUMBER_ROWS;                                                      // Number of Rows in the Grid
 int columns = NUMBER_COLUMNS;                                                // Number of Columns in the Grid
 int size = GRID_ELEMENT_SIZE;                                                // The Size of Each Elements
-int gridState[NUMBER_ROWS * NUMBER_COLUMNS] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, // The Grid State
-                                               1, 1, 1, 1, 3, 1, 1, 1, 1, 0,
-                                               0, 1, 1, 1, 1, 1, 0, 0, 1, 0,
+int gridState[NUMBER_ROWS * NUMBER_COLUMNS] = {1, 0, 0, 0, 0, 3, 1, 0, 0, 0, // The Grid State
+                                               1, 1, 0, 1, 1, 1, 1, 1, 1, 0,
+                                               0, 1, 0, 1, 0, 1, 0, 0, 1, 0,
                                                0, 1, 0, 1, 0, 1, 0, 0, 1, 0,
                                                0, 1, 0, 1, 0, 1, 0, 0, 1, 0,
                                                0, 1, 0, 1, 0, 0, 0, 0, 0, 0,
@@ -22,6 +23,17 @@ int gridState[NUMBER_ROWS * NUMBER_COLUMNS] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 
                                                0, 0, 0, 1, 0, 0, 1, 0, 1, 0,
                                                1, 1, 1, 1, 2, 0, 1, 0, 1, 0,
                                                0, 0, 0, 0, 0, 0, 0, 0, 1, 0};
+//Empty Grid
+/*int gridState[NUMBER_ROWS * NUMBER_COLUMNS] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // The Grid State
+                                               0, 0, 0, 0, 3, 0, 0, 0, 0, 0,
+                                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                               0, 0, 0, 0, 2, 0, 0, 0, 0, 0,
+                                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0};*/
 
 int main()
 {
@@ -44,13 +56,15 @@ int main()
     int imgColumns = columns * size;
     Image img = new Colori[imgRows * imgColumns];
     img = get_image_from_grid(&grid);
-
     stbi_write_png("1.path_to_find.png", imgColumns, imgRows, 4, (void *)img, imgColumns * sizeof(Colori));
 
     // Process Pathfinding
+    auto start = std::chrono::high_resolution_clock::now();
     std::cout << "Finding path...." << std::endl;
     Path path = find_path(&grid);
     path.set_path();
+    auto stop = std::chrono::high_resolution_clock::now();
+    printf("Pathfinding time is:- %.5f\n", std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count());
 
     // Show final Result
     std::cout << "Showing Result" << std::endl;

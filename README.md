@@ -8,6 +8,7 @@ A 2D Pathfinder using the A* algorithm along with visualization.
   - [ ] Dijkstra
   - [ ] GBFS
 - [ ] Add Path weights
+- [ ] Heap Optimization
 - [X] Disable Diagonal movement
 - [ ] Points at elevation
 - [ ] 3D Map

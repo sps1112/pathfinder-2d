@@ -4,6 +4,7 @@
 // Custom Headers
 #include <grid.h>
 #include <mathdef.h>
+#include <config.h>
 
 // Standard Headers
 #include <vector>
@@ -12,10 +13,14 @@
 // Finds the distance b/w 2 Positions
 int get_distance_bw_nodes(GridNode *a, GridNode *b)
 {
-    int deltaX = a->pos.x - b->pos.x;
-    int deltaY = a->pos.y - b->pos.y;
-    int dist = deltaY * deltaY + deltaX * deltaX;
-    return (int)(sqrt(dist) * 10);
+    int deltaX = absolute(a->pos.x - b->pos.x);
+    int deltaY = absolute(a->pos.y - b->pos.y);
+#if USE_ACCURATE_DIST
+    int dist = (int)(sqrt((deltaX * deltaX) + (deltaY * deltaY)));
+#else
+    int dist = 14 * min(deltaX, deltaY) + 10 * (max(deltaX, deltaY) - min(deltaX, deltaY));
+#endif
+    return dist;
 }
 
 struct NodeList
@@ -123,17 +128,6 @@ struct NodeList
         }
     }
 
-    void set_list_costs(GridNode *start, GridNode *target)
-    {
-        for (int i = 0; i < count; i++)
-        {
-            GridNode *node = list[i];
-            node->gCost = get_distance_bw_nodes(start, node);
-            node->hCost = get_distance_bw_nodes(target, node);
-            node->fCost = node->gCost + node->hCost;
-        }
-    }
-
     GridNode *get_current_node()
     {
         int minIndex = 0;
@@ -141,17 +135,17 @@ struct NodeList
         int minHCost = std::numeric_limits<int>::max();
         for (int i = 0; i < count; i++)
         {
-            if (list[i]->fCost < minFCost)
+            if (list[i]->get_fcost() < minFCost)
             {
-                minFCost = list[i]->fCost;
+                minFCost = list[i]->get_fcost();
                 minHCost = list[i]->hCost;
                 minIndex = i;
             }
-            else if (list[i]->fCost == minFCost)
+            else if (list[i]->get_fcost() == minFCost)
             {
                 if (list[i]->hCost <= minHCost)
                 {
-                    minFCost = list[i]->fCost;
+                    minFCost = list[i]->get_fcost();
                     minHCost = list[i]->hCost;
                     minIndex = i;
                 }
@@ -161,18 +155,10 @@ struct NodeList
     }
 };
 
-int get_fcost(GridNode *node, GridNode *start, GridNode *target)
-{
-    int gCost = get_distance_bw_nodes(start, node);
-    int hCost = get_distance_bw_nodes(target, node);
-    return gCost + hCost;
-}
-
 void set_cost(GridNode *node, GridNode *start, GridNode *target)
 {
     node->gCost = get_distance_bw_nodes(start, node);
     node->hCost = get_distance_bw_nodes(target, node);
-    node->fCost = node->gCost + node->hCost;
 }
 
 // The Path Struct containing all the nodes
@@ -195,18 +181,20 @@ struct Path
 // Returns a Path for the Grid
 Path find_path(Grid *grid)
 {
+    // Setup nodes
+    GridNode *startNode = grid->get_start_node();
+    GridNode *targetNode = grid->get_target_node();
+
     // Calculate Path
     NodeList openList;
     NodeList closedList;
-    GridNode *targetNode = grid->get_target_node();
-    GridNode *startNode = grid->get_start_node();
     openList.add_node(startNode);
-    openList.set_list_costs(startNode, targetNode);
-    int n = 0;
-    while (true)
+    int iteration = 0;
+    while (openList.count > 0)
     {
-        std::cout << "Iteration: " << n << std::endl;
-        n++;
+        std::cout << "Iteration: " << iteration << std::endl;
+        iteration++;
+        // Find Current Node
         GridNode *currentNode = openList.get_current_node();
         std::cout << "Current Node:"
                   << "(" << currentNode->pos.x << "," << currentNode->pos.y << ")" << std::endl;
@@ -216,10 +204,7 @@ Path find_path(Grid *grid)
         {
             break;
         }
-        if (currentNode != startNode)
-        {
-            currentNode->state = CHECKED;
-        }
+        // Check Neighbours
         for (int i = 0; i < currentNode->neighbourCount; i++)
         {
             GridNode *neighbour = currentNode->neighbours[i];
@@ -230,7 +215,6 @@ Path find_path(Grid *grid)
                 {
                     neighbour->gCost = moveCost;
                     neighbour->hCost = get_distance_bw_nodes(targetNode, neighbour);
-                    neighbour->fCost = neighbour->gCost + neighbour->hCost;
                     neighbour->parent = currentNode;
                     if (!openList.has_node(neighbour))
                     {
@@ -242,6 +226,10 @@ Path find_path(Grid *grid)
                     }
                 }
             }
+        }
+        if (currentNode != startNode)
+        {
+            currentNode->state = CHECKED;
         }
     }
     std::cout << "Path Found!!!" << std::endl;

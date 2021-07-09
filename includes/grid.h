@@ -33,7 +33,6 @@ struct GridNode
     GridNode *parent;                   // The node which comes before this node
     int gCost;                          // Distance from start Node
     int hCost;                          // Distance from target Node
-    int fCost;                          // Sum of Gcost and Hcost
     // Position Node Constuctor
     GridNode(Position pos_, NODE_STATE state_ = EMPTY) : pos(pos_), state(state_), neighbourCount(0) {}
     // Node Constuctor
@@ -42,6 +41,12 @@ struct GridNode
     bool is_traversable()
     {
         return (state != BLOCKED);
+    }
+
+    // Returns the sum of gCost and hCost for the node
+    int get_fcost()
+    {
+        return gCost + hCost;
     }
 };
 

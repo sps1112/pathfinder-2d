@@ -21,6 +21,12 @@ int clamp(int n, int min, int max)
     return ((n > max) ? max : ((n < min) ? min : n));
 }
 
+// Returns the absolute of n
+int absolute(int n)
+{
+    return ((n < 0) ? -n : n);
+}
+
 // 2D Position Struct
 struct Position
 {

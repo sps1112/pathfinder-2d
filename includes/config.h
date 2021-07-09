@@ -9,6 +9,7 @@
 
 // PathFinder Settings
 #define DIAGONAL_DISABLED 0
+#define USE_ACCURATE_DIST 0
 
 // Color Settings
 #define GAMMA_CORRECTION 0

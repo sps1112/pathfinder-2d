@@ -4,6 +4,7 @@
 // Custom Headers
 #include <mathdef.h>
 #include <vector>
+#include <config.h>
 
 // State of a Grid Node
 enum NODE_STATE
@@ -106,10 +107,19 @@ struct Grid
                 {
                     for (int newX = startX; newX <= endX; newX++)
                     {
+
                         if (newX != x || newY != y)
                         {
+#if DIAGONAL_DISABLED
+                            if (newX == x || newY == y)
+                            {
+                                node->neighbours.push_back(get_node_from_position(newX, newY));
+                                node->neighbourCount++;
+                            }
+#else
                             node->neighbours.push_back(get_node_from_position(newX, newY));
                             node->neighbourCount++;
+#endif
                         }
                     }
                 }

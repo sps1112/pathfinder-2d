@@ -219,16 +219,16 @@ Path find_path(Grid *grid)
         {
             break;
         }
+        if (currentNode != startNode)
+        {
+            currentNode->state = CHECKED;
+        }
         std::cout << "Check for neighbours..." << std::endl;
         for (int i = 0; i < currentNode->neighbourCount; i++)
         {
             GridNode *neighbour = currentNode->neighbours[i];
             if (neighbour->is_traversable() && !closedList.has_node(neighbour))
             {
-                if (neighbour != targetNode)
-                {
-                    neighbour->state = CHECKED;
-                }
                 int moveCost = currentNode->gCost + get_distance_bw_nodes(currentNode, neighbour);
                 if (!openList.has_node(neighbour) || moveCost < neighbour->gCost)
                 {

@@ -7,6 +7,9 @@
 #define GRID_ELEMENT_SIZE 80
 #define GRID_BORDER_SIZE 10
 
+// PathFinder Settings
+#define DIAGONAL_DISABLED 0
+
 // Color Settings
 #define GAMMA_CORRECTION 0
 #define EMPTY_COLOR Colorf(1.0f)

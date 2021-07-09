@@ -2,10 +2,10 @@
 #define CONFIG_H
 
 // Grid Settings
-#define NUMBER_ROWS 10
-#define NUMBER_COLUMNS 10
-#define GRID_ELEMENT_SIZE 80
-#define GRID_BORDER_SIZE 6
+#define NUMBER_ROWS 15
+#define NUMBER_COLUMNS 15
+#define GRID_ELEMENT_SIZE 60
+#define GRID_BORDER_SIZE 4
 
 // PathFinder Settings
 #define DIAGONAL_DISABLED 0

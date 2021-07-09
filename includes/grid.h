@@ -33,10 +33,11 @@ struct GridNode
     GridNode *parent;                   // The node which comes before this node
     int gCost;                          // Distance from start Node
     int hCost;                          // Distance from target Node
+    int index;                          // Index in the heap
     // Position Node Constuctor
-    GridNode(Position pos_, NODE_STATE state_ = EMPTY) : pos(pos_), state(state_), neighbourCount(0) {}
+    GridNode(Position pos_, NODE_STATE state_ = EMPTY) : pos(pos_), state(state_), neighbourCount(0), index(0) {}
     // Node Constuctor
-    GridNode(int x_ = 0, int y_ = 0, NODE_STATE state_ = EMPTY) : pos(Position(x_, y_)), state(state_), neighbourCount(0) {}
+    GridNode(int x_ = 0, int y_ = 0, NODE_STATE state_ = EMPTY) : pos(Position(x_, y_)), state(state_), neighbourCount(0), index(0) {}
     // Checks if Node is Traversable or not
     bool is_traversable()
     {
@@ -47,6 +48,13 @@ struct GridNode
     int get_fcost()
     {
         return gCost + hCost;
+    }
+
+    // Compare Node with Item i.e. (Item - Node)
+    int compare_item(GridNode *item)
+    {
+        int deltaF = (item->get_fcost() - get_fcost());
+        return ((deltaF == 0) ? (item->hCost - hCost) : deltaF);
     }
 };
 

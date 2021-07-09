@@ -5,6 +5,7 @@
 #include <grid.h>
 #include <mathdef.h>
 #include <config.h>
+#include <heap.h>
 
 // Standard Headers
 #include <vector>
@@ -186,20 +187,32 @@ Path find_path(Grid *grid)
     GridNode *targetNode = grid->get_target_node();
 
     // Calculate Path
+
+#if USE_HEAPS
+    Heap openList;
+    Heap closedList;
+    openList.add_to_heap(startNode);
+#else
     NodeList openList;
     NodeList closedList;
     openList.add_node(startNode);
+#endif
     int iteration = 0;
     while (openList.count > 0)
     {
         std::cout << "Iteration: " << iteration << std::endl;
         iteration++;
-        // Find Current Node
+// Find Current Node
+#if USE_HEAPS
+        GridNode *currentNode = openList.remove_first();
+        closedList.add_to_heap(currentNode);
+#else
         GridNode *currentNode = openList.get_current_node();
-        std::cout << "Current Node:"
-                  << "(" << currentNode->pos.x << "," << currentNode->pos.y << ")" << std::endl;
         openList.remove_node(currentNode);
         closedList.add_node(currentNode);
+#endif
+        std::cout << "Current Node:"
+                  << "(" << currentNode->pos.x << "," << currentNode->pos.y << ")" << std::endl;
         if (currentNode == targetNode)
         {
             break;
@@ -210,6 +223,8 @@ Path find_path(Grid *grid)
             GridNode *neighbour = currentNode->neighbours[i];
             if (neighbour->is_traversable() && !closedList.has_node(neighbour))
             {
+                /*std::cout << "Valid Neighbour at :"
+                          << "(" << neighbour->pos.x << "," << neighbour->pos.y << ")" << std::endl;*/
                 int moveCost = currentNode->gCost + get_distance_bw_nodes(currentNode, neighbour);
                 if (!openList.has_node(neighbour) || moveCost < neighbour->gCost)
                 {
@@ -218,11 +233,19 @@ Path find_path(Grid *grid)
                     neighbour->parent = currentNode;
                     if (!openList.has_node(neighbour))
                     {
+#if USE_HEAPS
+                        openList.add_to_heap(neighbour);
+#else
                         openList.add_node(neighbour);
+#endif
                     }
                     else
                     {
+#if USE_HEAPS
+                        openList.update_item(neighbour);
+#else
                         set_cost(neighbour, startNode, targetNode);
+#endif
                     }
                 }
             }

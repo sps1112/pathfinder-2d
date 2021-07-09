@@ -132,9 +132,9 @@ struct NodeList
     GridNode *get_current_node()
     {
         int minIndex = 0;
-        int minFCost = std::numeric_limits<int>::max();
-        int minHCost = std::numeric_limits<int>::max();
-        for (int i = 0; i < count; i++)
+        int minFCost = list[0]->get_fcost();
+        int minHCost = list[0]->hCost;
+        for (int i = 1; i < count; i++)
         {
             if (list[i]->get_fcost() < minFCost)
             {
@@ -144,7 +144,7 @@ struct NodeList
             }
             else if (list[i]->get_fcost() == minFCost)
             {
-                if (list[i]->hCost <= minHCost)
+                if (list[i]->hCost < minHCost)
                 {
                     minFCost = list[i]->get_fcost();
                     minHCost = list[i]->hCost;
@@ -223,8 +223,6 @@ Path find_path(Grid *grid)
             GridNode *neighbour = currentNode->neighbours[i];
             if (neighbour->is_traversable() && !closedList.has_node(neighbour))
             {
-                /*std::cout << "Valid Neighbour at :"
-                          << "(" << neighbour->pos.x << "," << neighbour->pos.y << ")" << std::endl;*/
                 int moveCost = currentNode->gCost + get_distance_bw_nodes(currentNode, neighbour);
                 if (!openList.has_node(neighbour) || moveCost < neighbour->gCost)
                 {

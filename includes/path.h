@@ -116,17 +116,13 @@ struct NodeList
                         listIndex++;
                     }
                 }
-                count--;
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < count - 1; i++)
                 {
                     list[i] = tempList[i];
                 }
             }
         }
-        else
-        {
-            count--;
-        }
+        count--;
     }
 
     GridNode *get_current_node()

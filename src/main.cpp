@@ -21,12 +21,12 @@ int gridState[NUMBER_ROWS * NUMBER_COLUMNS] = {0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                                1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0,
                                                0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0,
                                                0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0,
-                                               1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1,
-                                               0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0,
-                                               0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
+                                               1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1,
+                                               0, 0, 0, 1, 0, 3, 0, 0, 0, 1, 1, 0, 1, 0, 0,
+                                               0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
                                                0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0,
-                                               0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0,
-                                               0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0,
+                                               0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0,
+                                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 int main()
@@ -58,7 +58,7 @@ int main()
     Path path = find_path(&grid);
     path.set_path();
     auto stop = std::chrono::high_resolution_clock::now();
-    printf("Pathfinding time is:- %.5f\n", std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count());
+    printf("Pathfinding time is:- %5f\n", std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count());
 
     // Show final Result
     std::cout << "Showing Result" << std::endl;

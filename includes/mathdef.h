@@ -21,6 +21,12 @@ int clamp(int n, int min, int max)
     return ((n > max) ? max : ((n < min) ? min : n));
 }
 
+// Clamps the value of n from min to max
+float clampf(float n, float min = 0.0f, float max = 1.0f)
+{
+    return ((n > max) ? max : ((n < min) ? min : n));
+}
+
 // Returns the absolute of n
 int absolute(int n)
 {

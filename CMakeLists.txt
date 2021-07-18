@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.16.3)
 project(pathfinder-2d)
 
 set(CMAKE_CXX_STANDARD 11)
-if(MSVC)
+if(!MSVC)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++11")
-endif(MSVC)
+endif(!MSVC)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 

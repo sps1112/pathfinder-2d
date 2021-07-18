@@ -15,6 +15,7 @@ enum NODE_STATE
     TARGET,
     PATH,
     CHECKED,
+    NEIGHBOUR,
 };
 
 // Returns state from int value
